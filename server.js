@@ -5,9 +5,7 @@ const cors = require("cors");
 const morgan = require("morgan");
 const dotenv = require("dotenv");
 const Stripe = require("stripe");
-const stripe = Stripe(
-  "sk_test_51KGqWkHCcyZvTrDrTFSj7pSEPV59Cxo9blz5hlp01Li4YRv78lRagNBSNcTRQTfG5dWeIH9Y3QzwBAKYbGqY6LhZ00fZ1SgbLc"
-);
+
 const PORT = process.env.PORT || 5000;
 dotenv.config();
 
