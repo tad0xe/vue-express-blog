@@ -1,13 +1,13 @@
-const Product = require("../models/product");
+const Product = require("../models/arrival");
 const express = require("express");
 
 const upload = require("../middelwares/upload-photo");
 const router = express.Router();
 
-router.post(`/products`, upload.single("photo"), async (req, res) => {
+router.post(`/arrivals`, upload.single("photo"), async (req, res) => {
   console.log(res)
   try {
-    
+
     let product = new Product();
     product.owner = req.body.ownerID;
     product.category = req.body.categoryID;
@@ -16,7 +16,7 @@ router.post(`/products`, upload.single("photo"), async (req, res) => {
     product.photo = req.file.location;
     product.price = req.body.price;
     product.stockQuantity = req.body.stockQuantity;
-   
+
 
     await product.save();
     console.log(Product)
@@ -31,7 +31,7 @@ router.post(`/products`, upload.single("photo"), async (req, res) => {
 });
 
 
-router.get(`/products`, async (req, res) => {
+router.get(`/arrivals`, async (req, res) => {
   let filter = {};
   if(req.query.categories){
      filter = {category: req.query.categories.split( ',' )}
@@ -50,7 +50,7 @@ router.get(`/products`, async (req, res) => {
   }
 });
 
-router.get(`/products/:id`, async (req, res) => {
+router.get(`/arrivals/:id`, async (req, res) => {
   try {
     const product = await Product.findOne({ _id: req.params.id})
       .populate("owner category")
@@ -63,23 +63,9 @@ router.get(`/products/:id`, async (req, res) => {
     res.status(500).json({ success: false });
   }
 });
-router.get(`/products/:title`, async (req, res) => {
-  console.log(res)
-  try {
-    const product = await Product.findOne({ title: req.params.title})
-      .populate("owner category")
-      .exec();
-    res.json({
-      status: true,
-      product: product
-    });
-  } catch (error) {
-    console.error(`/products/${req.params.title}`, error)
-    res.status(500).json({ success: false });
-  }
-});
 
-router.put(`/products/:id`, async (req, res) => {
+
+router.put(`/arrivals/:id`, async (req, res) => {
   try {
     const product = await Product.findOneAndUpdate(
       { _id: req.params.id },
@@ -108,7 +94,7 @@ router.put(`/products/:id`, async (req, res) => {
   }
 });
 
-router.delete(`/products/:id`, async (req, res) => {
+router.delete(`/arrivals/:id`, async (req, res) => {
   try {
     let deletedProduct = await Product.findByIdAndDelete({
       _id: req.params.id

@@ -1,13 +1,43 @@
 const router = require("express").Router();
 const moment = require("moment");
 const Stripe = require("stripe");
-const stripe = Stripe("sk_test_bLc");
+const stripe = Stripe("sk_test_51KGqWkHCcyZvTrDrTFSj7pSEPV59Cxo9blz5hlp01Li4YRv78lRagNBSNcTRQTfG5dWeIH9Y3QzwBAKYbGqY6LhZ00fZ1SgbLc");
 
 const nodemailer = require("nodemailer");
 const verifyToken = require("../middelwares/verify-token");
 const Order = require("../models/order");
 
+const SHIPMENT = {
+  normal: {
+    price: 13.98,
+    days: 7
+  },
+  fast: {
+    price: 49.98,
+    days: 3
+  }
+};
+
+function shipmentPrice(shipmentOption) {
+  let estimated = moment()
+    .add(shipmentOption.days, "d")
+    .format("dddd MMMM Do");
+
+  return { estimated, price: shipmentOption.price };
+}
+
+router.post("/shipment", (req, res) => {
+  let shipment;
+  if (req.body.shipment === "normal") {
+    shipment = shipmentPrice(SHIPMENT.normal);
+  } else {
+    shipment = shipmentPrice(SHIPMENT.fast);
+  }
+
+  res.json({ success: true, shipment: shipment });
+});
 router.post("/pay", verifyToken, (req, res) => {
+  console.log(req,res)
   let totalPrice = Math.round(req.body.totalPrice * 100);
   stripe.customers
     .create({
@@ -38,7 +68,7 @@ router.post("/pay", verifyToken, (req, res) => {
   Your full order details are available at ecart.io/#/order-complete/${
     charge.id
   } \n
-  For questions contact your_support_email@gmail.com \n 
+  For questions contact your_support_email@gmail.com \n
   Thank you!`;
             let mailTransporter = nodemailer.createTransport({
               service: "gmail",

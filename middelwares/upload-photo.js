@@ -10,9 +10,10 @@ aws.config.update({
 const s3 = new aws.S3();
 
 const upload = multer({
+    limits: { fieldSize: 2 * 1024 * 1024 },
     storage: multerS3({
         s3: s3,
-        bucket: 'ajibade',
+        bucket: 'ajibs',
         acl: 'public-read',
         metadata: (req, file, cb) => {
             cb(null, { fieldName: file.fieldname });

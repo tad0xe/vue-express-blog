@@ -67,6 +67,7 @@ router.post("/auth/signup", async (req, res) => {
         message: "Successfully created"
       });
     } catch (err) {
+      console.log(err)
       res.status(500).json({
         success: false,
         message: err.message

@@ -4,19 +4,19 @@ const Schema = mongoose.Schema;
 const CategorySchema = new Schema({
   owner: { type: Schema.Types.ObjectId, ref: "User" },
   type:{
-  
+
     type: String,
     unique: true,
     required: true
   },
-  products: [
+  photo: String,
+  blogs: [
     {
-      productID: { type: Schema.Types.ObjectId, ref: "Product" },
-      quantity: Number,
-      price: Number
+      blogID: { type: Schema.Types.ObjectId, ref: "Blog" },
+
     }
   ]
- 
+
 });
 
 CategorySchema.plugin(deepPopulate)

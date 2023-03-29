@@ -6,16 +6,19 @@ const morgan = require("morgan");
 const dotenv = require("dotenv");
 const Stripe = require("stripe");
 
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 4000;
 dotenv.config();
 
 const app = express();
 const router = express.Router();
-const productsRoutes = require("./routes/product");
+const blogsRoutes = require("./routes/blog");
+const dealsRoutes = require("./routes/deal");
+const arrivalRoutes = require("./routes/arrival");
 const categoryRoutes = require("./routes/category");
 const ownerRoutes = require("./routes/owner");
 const userRoutes = require("./routes/auth");
-
+const reviewRoutes = require("./routes/review");
+const addressRoutes = require("./routes/address");
 const paymentRoutes = require("./routes/payment");
 
 const orderRoutes = require("./routes/order");
@@ -23,8 +26,11 @@ const orderRoutes = require("./routes/order");
 app.use(morgan("combined"));
 app.use(bodyParser.json());
 app.use(cors());
-app.use("/api", productsRoutes);
-
+app.use("/api", blogsRoutes);
+app.use("/api", dealsRoutes);
+app.use("/api", addressRoutes);
+app.use("/api", arrivalRoutes);
+app.use("/api", reviewRoutes);
 app.use("/api", categoryRoutes);
 app.use("/api", ownerRoutes);
 app.use("/api", userRoutes);
@@ -32,16 +38,17 @@ app.use("/api", userRoutes);
 app.use("/api", paymentRoutes);
 
 app.use("/api", orderRoutes);
+
 //connect to mongodb
 
-/*mongoose
+mongoose
   .connect( process.env.CONNECTION_STRING)
   .then(() => {
     console.log(`Listening on ${ PORT }`);
   })
-  .catch(err => console.log(err)); 
- */
+  .catch(err => console.log(err));
 
+/*
 mongoose
   .connect(process.env.DATABASE, {
     useUnifiedTopology: true,
@@ -56,7 +63,7 @@ mongoose
     console.error("App starting error:", err.stack);
     process.exit(1);
   });
-
+*/
 //const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => console.log(`Listening on ${PORT}`));
